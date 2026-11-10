@@ -96,14 +96,14 @@ jobs:
 
       - name: Preflight
         id: preflight
-        uses: projectbluefin/actions/bootc-build/preflight@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/preflight@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           registry: ghcr.io
           github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
 
       - name: Setup runner
-        uses: projectbluefin/actions/bootc-build/setup-runner@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/setup-runner@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           storage-backend: btrfs
           native-overlay: "true"
@@ -112,7 +112,7 @@ jobs:
 
       - name: Restore DNF cache
         id: dnf-cache-restore
-        uses: projectbluefin/actions/bootc-build/dnf-cache@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/dnf-cache@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           action: restore
           cache-name: ${{ env.IMAGE_NAME }}
@@ -147,7 +147,7 @@ jobs:
 
       - name: Generate tags
         id: generate-tags
-        uses: projectbluefin/actions/bootc-build/generate-tags@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/generate-tags@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           base-name: ${{ env.IMAGE_NAME }}
           stream-name: ${{ env.TAG_STREAM }}
@@ -194,7 +194,7 @@ jobs:
 
       - name: Save DNF cache
         if: always() && !cancelled()
-        uses: projectbluefin/actions/bootc-build/dnf-cache@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/dnf-cache@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           action: save
           cache-name: ${{ env.IMAGE_NAME }}
@@ -206,7 +206,7 @@ jobs:
       - name: Rechunk image
         if: env.ENABLE_RECHUNKING == 'true'
         id: rechunk-image
-        uses: projectbluefin/actions/bootc-build/chunka@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/chunka@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           source-image: localhost/${{ env.IMAGE_NAME }}:${{ env.DEFAULT_TAG }}
           max-layers: ${{ env.RECHUNK_MAX_LAYERS }}
@@ -227,7 +227,7 @@ jobs:
 
       - name: Push to GHCR
         id: push
-        uses: projectbluefin/actions/bootc-build/push-image@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/push-image@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           image-name: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.branch-tags.outputs.tags }}
@@ -242,7 +242,7 @@ jobs:
 
       - name: Sign and publish
         continue-on-error: true
-        uses: projectbluefin/actions/bootc-build/sign-and-publish@09d8fba59ac918250aa25101e99c40d90cb62618 # v1
+        uses: projectbluefin/actions/bootc-build/sign-and-publish@7ec268309dae8c2f01939353dde15d845f915fdd # v1
         with:
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           digest: ${{ steps.push.outputs.digest }}
